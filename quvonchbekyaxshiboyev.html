@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quvonchbek - Reys Qidiruv</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .result-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quvonchbek - Reys Qidiruv</h1>
+        <div class="form-group">
+            <label for="from">Biz turgan joy:</label>
+            <input type="text" id="from" placeholder="Masalan, Toshkent">
+        </div>
+        <div class="form-group">
+            <label for="to">Bormoqchi bo'lgan joy:</label>
+            <input type="text" id="to" placeholder="Masalan, Moskva">
+        </div>
+        <button id="searchBtn">Poisk</button>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        const flights = [
+            {
+                from: "Toshkent",
+                to: "Istanbul",
+                departureTime: "2025-01-15, 12:00",
+                passengers: "1 kattalar",
+                flightName: "Uzbekistan Airways, HY-145",
+                price: "$350",
+                comfort: "Iqtisod klass",
+                rating: 8
+            },
+            {
+                from: "Toshkent",
+                to: "Moskva",
+                departureTime: "2025-01-16, 15:30",
+                passengers: "2 kattalar",
+                flightName: "Aeroflot, SU-187",
+                price: "$400",
+                comfort: "Iqtisod klass",
+                rating: 7
+            },
+            {
+                from: "Samarqand",
+                to: "Dubai",
+                departureTime: "2025-01-18, 09:00",
+                passengers: "1 kattalar, 1 bolalar",
+                flightName: "FlyDubai, FZ-194",
+                price: "$500",
+                comfort: "Iqtisod klass",
+                rating: 9
+            },
+            {
+                from: "Buxoro",
+                to: "Istanbul",
+                departureTime: "2025-01-20, 13:45",
+                passengers: "1 kattalar",
+                flightName: "Turkish Airlines, TK-291",
+                price: "$450",
+                comfort: "Iqtisod klass",
+                rating: 6
+            },
+            {
+                from: "Toshkent",
+                to: "London",
+                departureTime: "2025-01-22, 18:00",
+                passengers: "1 kattalar",
+                flightName: "British Airways, BA-232",
+                price: "$700",
+                comfort: "Iqtisod klass",
+                rating: 9
+            },
+            {
+                from: "Namangan",
+                to: "Dubai",
+                departureTime: "2025-01-25, 22:00",
+                passengers: "2 kattalar",
+                flightName: "Uzbekistan Airways, HY-560",
+                price: "$480",
+                comfort: "Iqtisod klass",
+                rating: 7
+            },
+            {
+                from: "Farg'ona",
+                to: "Moskva",
+                departureTime: "2025-01-28, 07:15",
+                passengers: "1 kattalar",
+                flightName: "Aeroflot, SU-215",
+                price: "$420",
+                comfort: "Iqtisod klass",
+                rating: 8
+            },
+            {
+                from: "Toshkent",
+                to: "Parij",
+                departureTime: "2025-01-30, 12:30",
+                passengers: "1 kattalar",
+                flightName: "Uzbekistan Airways, HY-203",
+                price: "$750",
+                comfort: "Iqtisod klass",
+                rating: 9
+            },
+            {
+                from: "Buxoro",
+                to: "Istanbul",
+                departureTime: "2025-02-02, 14:50",
+                passengers: "1 kattalar",
+                flightName: "Turkish Airlines, TK-213",
+                price: "$460",
+                comfort: "Iqtisod klass",
+                rating: 7
+            },
+            {
+                from: "Toshkent",
+                to: "Seul",
+                departureTime: "2025-02-05, 10:00",
+                passengers: "2 kattalar, 1 bolalar",
+                flightName: "Korean Air, KE-508",
+                price: "$1,200",
+                comfort: "Biznes klass",
+                rating: 10
+            },
+            {
+                from: "Toshkent",
+                to: "Istanbul",
+                departureTime: "2025-02-08, 08:00",
+                passengers: "1 kattalar",
+                flightName: "Pegasus Airlines, PC-452",
+                price: "$330",
+                comfort: "Iqtisod klass",
+                rating: 6
+            },
+            {
+                from: "Samarqand",
+                to: "Moskva",
+                departureTime: "2025-02-10, 16:20",
+                passengers: "2 kattalar",
+                flightName: "Uzbekistan Airways, HY-288",
+                price: "$410",
+                comfort: "Iqtisod klass",
+                rating: 7
+            },
+            {
+                from: "Toshkent",
+                to: "Frankfurt",
+                departureTime: "2025-02-12, 19:30",
+                passengers: "1 kattalar",
+                flightName: "Lufthansa, LH-649",
+                price: "$680",
+                comfort: "Iqtisod klass",
+                rating: 8
+            },
+            {
+                from: "Toshkent",
+                to: "Kuala-Lumpur",
+                departureTime: "2025-02-15, 22:10",
+                passengers: "1 kattalar",
+                flightName: "Malaysia Airlines, MH-245",
+                price: "$950",
+                comfort: "Iqtisod klass",
+                rating: 9
+            },
+            {
+                from: "Namangan",
+                to: "Istanbul",
+                departureTime: "2025-02-18, 11:15",
+                passengers: "1 kattalar",
+                flightName: "Pegasus Airlines, PC-634",
+                price: "$340",
+                comfort: "Iqtisod klass",
+                rating: 6
+            },
+            {
+                from: "Toshkent",
+                to: "New York",
+                departureTime: "2025-02-20, 23:00",
+                passengers: "1 kattalar",
+                flightName: "Uzbekistan Airways, HY-101",
+                price: "$1,100",
+                comfort: "Biznes klass",
+                rating: 10
+            },
+            {
+                from: "Samarqand",
+                to: "Istanbul",
+                departureTime: "2025-02-22, 10:45",
+                passengers: "1 kattalar",
+                flightName: "Turkish Airlines, TK-298",
+                price: "$460",
+                comfort: "Iqtisod klass",
+                rating: 7
+            },
+            {
+                from: "Toshkent",
+                to: "Berlin",
+                departureTime: "2025-02-24, 13:00",
+                passengers: "2 kattalar",
+                flightName: "Uzbekistan Airways, HY-204",
+                price: "$720",
+                comfort: "Iqtisod klass",
+                rating: 8
+            },
+            {
+                from: "Farg'ona",
+                to: "Moskva",
+                departureTime: "2025-02-26, 06:00",
+                passengers: "1 kattalar",
+                flightName: "Aeroflot, SU-207",
+                price: "$410",
+                comfort: "Iqtisod klass",
+                rating: 7
+            },
+            {
+                from: "Toshkent",
+                to: "Singapore",
+                departureTime: "2025-02-28, 21:15",
+                passengers: "1 kattalar",
+                flightName: "Singapore Airlines, SQ-510",
+                price: "$900",
+                comfort: "Biznes klass",
+                rating: 9
+            }
+        ];
+
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            const from = document.getElementById('from').value.trim().toLowerCase();
+            const to = document.getElementById('to').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('results');
+
+            resultsDiv.innerHTML = '';
+
+            const filteredFlights = flights.filter(flight => 
+                flight.from.toLowerCase() === from && flight.to.toLowerCase() === to
+            );
+
+            if (filteredFlights.length === 0) {
+                resultsDiv.innerHTML = '<p>Malumot topilmadi.</p>';
+            } else {
+                filteredFlights.forEach(flight => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.innerHTML = `
+                        <p><strong>Jo'nash manzili:</strong> ${flight.from}</p>
+                        <p><strong>Boradigan manzil:</strong> ${flight.to}</p>
+                        <p><strong>Jo'nash vaqti:</strong> ${flight.departureTime}</p>
+                        <p><strong>Yo'lovchilar soni:</strong> ${flight.passengers}</p>
+                        <hr>
+                        <p><strong>Reys nomi:</strong> ${flight.flightName}</p>
+                        <p><strong>Narxi:</strong> ${flight.price}</p>
+                        <p><strong>Qulayliklar:</strong> ${flight.comfort}</p>
+                        <p><strong>Yo'lovchilar bahosi:</strong> ${flight.rating}/10</p>
+                    `;
+                    resultsDiv.appendChild(div);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
